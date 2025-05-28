@@ -130,7 +130,8 @@ $utilities = @(
     }
 )
 
-# Display menu function
+$allApps = $codeApps + $communicationApps + $browserApps + $hardwareApps + $utilities
+
 function Show-Menu {
     param (
         [string]$Title = 'Choose Applications to Download'
@@ -138,31 +139,9 @@ function Show-Menu {
     Clear-Host
     Write-Host "================ $Title ================"
     Write-Host ""
-    
-    for ($i = 0; $i -lt $codeApps.Count; $i++) {
-        Write-Host "$($i+1).`t$($codeApps[$i].Name)"
+    for ($i = 0; $i -lt $allApps.Count; $i++) {
+        Write-Host "$($i+1).`t$($allApps[$i].Name)"
     }
-    Write-Host ""
-
-    for ($i = 0; $i -lt $communicationApps.Count; $i++) {
-        Write-Host "$($i+1+$codeApps.Count).`t$($communicationApps[$i].Name)"
-    }
-    Write-Host ""
-
-    for ($i = 0; $i -lt $browserApps.Count; $i++) {
-        Write-Host "$($i+1+$codeApps.Count+$communicationApps.Count).`t$($browserApps[$i].Name)"
-    }
-    Write-Host ""
-    
-    for ($i = 0; $i -lt $hardwareApps.Count; $i++) {
-        Write-Host "$($i+1+$codeApps.Count+$communicationApps.Count+$browserApps.Count).`t$($hardwareApps[$i].Name)"
-    }
-    Write-Host ""
-    
-    for ($i = 0; $i -lt $utilities.Count; $i++) {
-        Write-Host "$($i+1+$codeApps.Count+$communicationApps.Count+$browserApps.Count+$hardwareApps.Count).`t$($utilities[$i].Name)"
-    }
-    
     Write-Host ""
     Write-Host "A.`tDownload All Applications"
     Write-Host "Q.`tExit"
@@ -182,26 +161,14 @@ do {
     $selectedApps = @()
     
     if ($selection -eq 'A') {
-        $selectedApps = $codeApps + $communicationApps + $browserApps + $hardwareApps + $utilities
+        $selectedApps = $allApps
     }
     else {
         $choices = $selection -split ',' | ForEach-Object { $_.Trim() }
         
         foreach ($choice in $choices) {
-            if ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $codeApps.Count) {
-                $selectedApps += $codeApps[[int]$choice-1]
-            }
-            elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $communicationApps.Count) {
-                $selectedApps += $communicationApps[[int]$choice-1-$codeApps.Count]
-            }
-            elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $browserApps.Count) {
-                $selectedApps += $browserApps[[int]$choice-1-$codeApps.Count-$communicationApps.Count]
-            }
-            elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $hardwareApps.Count) {
-                $selectedApps += $hardwareApps[[int]$choice-1-$codeApps.Count-$communicationApps.Count-$browserApps.Count]
-            }
-            elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $utilities.Count) {
-                $selectedApps += $utilities[[int]$choice-1-$codeApps.Count-$communicationApps.Count-$browserApps.Count-$hardwareApps.Count]
+            if ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $allApps.Count) {
+                $selectedApps += $allApps[[int]$choice-1]
             }
             else {
                 Write-Host "Invalid choice: $choice" -ForegroundColor Red
@@ -230,7 +197,7 @@ do {
             }
         }
         else {
-            Write-Host "Download canceled." -ForegroundColor Magenta
+            Write-Host "Download cancelled." -ForegroundColor Magenta
         }
     }
     
