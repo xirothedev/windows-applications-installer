@@ -35,32 +35,31 @@ function Get-File {
     }
 }
 
-# List of applications to download
-$apps = @(
-    @{
-        Name = "Discord";
-        URL = "https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86";
-        FileName = "DiscordSetup.exe"
-    },
+# Code applications
+$codeApps = @(
     @{
         Name = "Visual Studio Code";
         URL = "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64";
         FileName = "VSCodeSetup-x64.exe"
     },
     @{
-        Name = "UltraViewer";
-        URL = "https://www.ultraviewer.net/vi/UltraViewer_setup_6.6_vi.exe";
-        FileName = "UltraViewerSetup.exe"
+        Name = "Postman";
+        URL = "https://dl.pstmn.io/download/latest/win64";
+        FileName = "PostmanSetup.exe"
+    }
+)
+
+# Communication applications
+$communicationApps = @(
+    @{
+        Name = "Discord";
+        URL = "https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86";
+        FileName = "DiscordSetup.exe"
     },
     @{
-        Name = "Google Chrome";
-        URL = "https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7B806F36C0-CB54-4A84-A3F3-0CF8A86575E0%7D%26lang%3Den%26browser%3D3%26usagestats%3D0%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26ap%3Dx64-stable-statsdef_1%26installdataindex%3Dempty/update2/installers/ChromeSetup.exe";
-        FileName = "ChromeSetup.exe"
-    },
-    @{
-        Name = "7-Zip";
-        URL = "https://7-zip.org/a/7z2405-x64.exe";
-        FileName = "7z-x64.exe"
+        Name = "Zalo PC";
+        URL = "https://zalo.me/download/zalo-pc?utm=90000";
+        FileName = "ZaloSetup.exe"
     },
     @{
         Name = "Zoom";
@@ -73,6 +72,34 @@ $apps = @(
         FileName = "TeamViewerSetup.exe"
     },
     @{
+        Name = "UltraViewer";
+        URL = "https://www.ultraviewer.net/vi/UltraViewer_setup_6.6_vi.exe";
+        FileName = "UltraViewerSetup.exe"
+    }
+)
+
+# Browser applications
+$browserApps = @(
+    @{
+        Name = "Google Chrome";
+        URL = "https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7B806F36C0-CB54-4A84-A3F3-0CF8A86575E0%7D%26lang%3Den%26browser%3D3%26usagestats%3D0%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26ap%3Dx64-stable-statsdef_1%26installdataindex%3Dempty/update2/installers/ChromeSetup.exe";
+        FileName = "ChromeSetup.exe"
+    },
+    @{
+        Name = "Firefox";
+        URL = "https://download.mozilla.org/?product=firefox-stub&os=win&lang=en-US";
+        FileName = "FirefoxSetup.exe"
+    },
+    @{
+        Name = "Microsoft Edge";
+        URL = "https://go.microsoft.com/fwlink/?linkid=2109047&Channel=Stable&language=en&brand=M100";
+        FileName = "MicrosoftEdgeSetup.msi"
+    }
+)
+
+# Hardware monitoring applications
+$hardwareApps = @(
+    @{
         Name = "HW Monitor";
         URL = "https://download.cpuid.com/hwmonitor/hwmonitor_1.57.exe";
         FileName = "HWMonitorSetup.exe"
@@ -81,31 +108,25 @@ $apps = @(
         Name = "Cpu-Z";
         URL = "https://www.cpuid.com/downloads/cpu-z/cpu-z_2.15-en.exe";
         FileName = "CpuZSetup.exe"
-    }
+    },
     @{
         Name = "CrystalDiskInfo";
-        URL = "https://sourceforge.net/projects/crystaldiskinfo/files/latest/download"
+        URL = "https://sourceforge.net/projects/crystaldiskinfo/files/latest/download";
         FileName = "CrystalDiskInfoSetup.exe"
+    }
+)
+
+# Vietnamese input application
+$utilities = @(
+    @{
+        Name = "Unikey";
+        URL = "https://github.com/xirothedev/windows-applications-installer/blob/main/Unikey/UniKeyNT.exe";
+        FileName = "UniKeySetup.exe"
     },
     @{
         Name = "WinRAR";
         URL = "https://www.rarlab.com/rar/winrar-x64-711.exe";
         FileName = "WinRARSetup.exe"
-    },
-    @{
-        Name = "Zalo PC";
-        URL = "https://zalo.me/download/zalo-pc?utm=90000";
-        FileName = "ZaloSetup.exe"
-    },
-    @{
-        Name = "Postman";
-        URL = "https://dl.pstmn.io/download/latest/win64";
-        FileName = "PostmanSetup.exe"
-    }
-    @{
-        Name = "Unikey";
-        URL = "https://github.com/xirothedev/windows-applications-installer/blob/main/Unikey/UniKeyNT.exe";
-        FileName = "UniKeySetup.exe"
     }
 )
 
@@ -118,8 +139,28 @@ function Show-Menu {
     Write-Host "================ $Title ================"
     Write-Host ""
     
-    for ($i = 0; $i -lt $apps.Count; $i++) {
-        Write-Host "$($i+1).`t$($apps[$i].Name)"
+    for ($i = 0; $i -lt $codeApps.Count; $i++) {
+        Write-Host "$($i+1).`t$($codeApps[$i].Name)"
+    }
+    Write-Host ""
+
+    for ($i = 0; $i -lt $communicationApps.Count; $i++) {
+        Write-Host "$($i+1+$codeApps.Count).`t$($communicationApps[$i].Name)"
+    }
+    Write-Host ""
+
+    for ($i = 0; $i -lt $browserApps.Count; $i++) {
+        Write-Host "$($i+1+$codeApps.Count+$communicationApps.Count).`t$($browserApps[$i].Name)"
+    }
+    Write-Host ""
+    
+    for ($i = 0; $i -lt $hardwareApps.Count; $i++) {
+        Write-Host "$($i+1+$codeApps.Count+$communicationApps.Count+$browserApps.Count).`t$($hardwareApps[$i].Name)"
+    }
+    Write-Host ""
+    
+    for ($i = 0; $i -lt $utilities.Count; $i++) {
+        Write-Host "$($i+1+$codeApps.Count+$communicationApps.Count+$browserApps.Count+$hardwareApps.Count).`t$($utilities[$i].Name)"
     }
     
     Write-Host ""
@@ -141,14 +182,26 @@ do {
     $selectedApps = @()
     
     if ($selection -eq 'A') {
-        $selectedApps = $apps
+        $selectedApps = $codeApps + $communicationApps + $browserApps + $hardwareApps + $utilities
     }
     else {
         $choices = $selection -split ',' | ForEach-Object { $_.Trim() }
         
         foreach ($choice in $choices) {
-            if ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $apps.Count) {
-                $selectedApps += $apps[[int]$choice-1]
+            if ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $codeApps.Count) {
+                $selectedApps += $codeApps[[int]$choice-1]
+            }
+            elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $communicationApps.Count) {
+                $selectedApps += $communicationApps[[int]$choice-1-$codeApps.Count]
+            }
+            elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $browserApps.Count) {
+                $selectedApps += $browserApps[[int]$choice-1-$codeApps.Count-$communicationApps.Count]
+            }
+            elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $hardwareApps.Count) {
+                $selectedApps += $hardwareApps[[int]$choice-1-$codeApps.Count-$communicationApps.Count-$browserApps.Count]
+            }
+            elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $utilities.Count) {
+                $selectedApps += $utilities[[int]$choice-1-$codeApps.Count-$communicationApps.Count-$browserApps.Count-$hardwareApps.Count]
             }
             else {
                 Write-Host "Invalid choice: $choice" -ForegroundColor Red
